@@ -18,13 +18,11 @@ function loadSearch() {
                         threshold: 0.4,
                         ignoreLocation: true,
                         keys: [
-                            'title',
-                            'permalink',
+                            {name:'title', weight:10},
                             'summary',
                             'content'
                         ]
                     };
-                    {{ if . }}options = {{ jsonify . }}{{ end }} // load custom options from .Site.Params.fuseOpts
                     fuse = new Fuse(data, options); // build the index from the json file
                 }
             } else {
