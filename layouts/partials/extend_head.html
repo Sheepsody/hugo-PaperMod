@@ -4,7 +4,14 @@
 {{- if (eq .Layout `graph`) -}}
 <link rel="stylesheet" href="/css/graph.css">
 <script src="https://d3js.org/d3.v6.min.js"></script>
-<script src="/js/graph.js"></script>
+{{- $graph := resources.Get "js/graph.js" | resources.ExecuteAsTemplate "js/graph.js" .Site.Params.graphParams }}
+{{- if not .Site.Params.assets.disableFingerprinting }}
+{{- $graph := $graph | minify | fingerprint }}
+<script defer src="{{ $graph.RelPermalink }}" integrity="{{ $graph.Data.Integrity }}"></script>
+{{- else}}
+{{- $graph := $graph | minify }}
+<script defer src="{{ $graph.RelPermalink }}" integrity="{{ $graph.Data.Integrity }}"></script>
+{{- end -}}
 {{- end -}}
 
 <!-- Latex-style math rendering -->
